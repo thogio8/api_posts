@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Post;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -45,4 +46,11 @@ class PostRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
+    public function findPostsAfter(\DateTime $date){
+        $critere = new Criteria();
+        $critere->where(Criteria::expr()->gt('created_at', $date))
+            ->orderBy(["created_at"=>'DESC']);
+        return $this->matching($critere);
+    }
 }
